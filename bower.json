@@ -1,0 +1,35 @@
+{
+  "name": "cookie-consent-polymer",
+  "version": "0.0.1",
+  "authors": [
+    "Zisis Maras <contact@zisismaras.me>"
+  ],
+  "description": "The cookie-consent-polymer element provides a dialog with the option to accept website cookies accordingto the EU law. Uses http://freegeoip.net for geolocation.",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "cookie",
+    "eu",
+    "consent",
+    "law"
+  ],
+  "main": "cookie-consent-polymer.html",
+  "license": "MIT",
+  "homepage": "https://github.com/zisismaras/cookie-consent-polymer",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0",
+    "paper-dialog": "PolymerElements/paper-dialog#~1.0.3",
+    "paper-button": "PolymerElements/paper-button#~1.0.8",
+    "neon-animation": "PolymerElements/neon-animation#~1.0.8",
+    "iron-jsonp-library": "PolymerElements/iron-jsonp-library#~1.0.4"
+  },
+  "devDependencies": {
+    "paper-styles": "polymerelements/paper-styles#^1.0.4",
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

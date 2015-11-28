@@ -1,0 +1,163 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-jsonp-library/iron-jsonp-library.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<!--
+The cookie-consent-polymer element provides a dialog with the option to accept website cookies according
+to the EU law.
+Uses http://freegeoip.net for geolocation.
+
+Example:
+
+    <cookie-consent-polymer
+        dialog-text="This website uses cookies to ensure you get the best experience on our website."
+        more-info-link="/policy"
+        more-info-text="Learn more" #leave empty to disable it
+        button-text="Accept"
+        expires-in-days=30></cookie-consent-polymer>
+
+@element cookie-consent-polymer
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="cookie-consent-polymer">
+
+  <template>
+    <style>
+      :host {
+      }
+      paper-dialog > *:first-child {
+          margin-bottom: 24px;
+      }
+      #consent_dialog {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        bottom: 0;
+        display: table;
+      }
+      #dialog_body, #policy_link, #accept_button {
+        display: table-cell;
+        vertical-align: middle;
+
+      }
+      #accept_button {
+        width: 10%;
+      }
+      #policy_link{
+        padding-left: 5px;
+      }
+    </style>
+    <iron-jsonp-library id="check_country"
+      library-url="http://freegeoip.net/json/?callback=_getCountry"
+      notify-event="api-load"
+      callback-name="_getCountry"
+      library-loaded="{{loaded}}"></iron-jsonp-library>
+    <paper-dialog id="consent_dialog"
+                  no-cancel-on-esc-key="true"
+                  no-cancel-on-outside-click="true"
+                  entry-animation="scale-up-animation"
+                  exit-animation="fade-out-animation">
+      <div>
+        <p id="dialog_body"></p>
+        <a id="policy_link"></a>
+      </div>
+      <paper-button raised id="accept_button" on-click="" dialog-confirm></paper-button>
+    </paper-dialog>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'cookie-consent-polymer',
+
+    listeners: {
+      'api-load': '_getCountry',
+    },
+    properties: {
+
+      dialogText: {
+        type: String,
+        value: "This website uses cookies to ensure you get the best experience on our website."
+      },
+      moreInfoLink: {
+        type: String,
+        value: "/policy"
+      },
+      moreInfoText: {
+        type: String,
+        value: "More info"
+      },
+      buttonText: {
+        type: String,
+        value: "Got it!"
+      },
+      expiresInDays: {
+        type: Number,
+        value: 365
+      }
+    },
+    _setCookie: function() {
+      var date = new Date();
+      date.setTime(+ date + (this.expiresInDays * 86400000));
+      document.cookie = "acceptCookies=true; expires=" + date.toGMTString() + "; path=/";
+    },
+
+    _countryCodes: function() {
+        return [
+          'BE',
+          'BG',
+          'CZ',
+          'DK',
+          'DE',
+          'EE',
+          'IE',
+          'GR',
+          'ES',
+          'FR',
+          'IT',
+          'CY',
+          'LV',
+          'LT',
+          'LU',
+          'HU',
+          'MT',
+          'NL',
+          'AT',
+          'PL',
+          'PT',
+          'RO',
+          'SI',
+          'SK',
+          'FI',
+          'SE',
+          'GB'
+        ];
+    },
+
+    _getCountry: function(e) {
+      var code = e.detail[0].country_code;
+      if (document.cookie.indexOf("acceptCookies") < 0 && this._countryCodes().indexOf(code) >= 0) {
+          this.$.consent_dialog.open();
+      } else {
+        console.log("Nope");
+      }
+    },
+
+    attached: function() {
+      this.$.dialog_body.textContent = this.dialogText;
+      if (this.moreInfoText) {
+          this.$.policy_link.textContent = this.moreInfoText;
+          this.$.policy_link.href = this.moreInfoLink;
+      }
+      this.$.accept_button.textContent = this.buttonText;
+    }
+
+  });
+
+</script>
