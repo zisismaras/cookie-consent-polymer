@@ -39,12 +39,12 @@ Example:
         bottom: 0;
         display: table;
       }
-      #dialog_body, #policy_link, #accept_button {
+      #dialog_body, #policy_link, #accept_button, #decline_button {
         display: table-cell;
         vertical-align: middle;
 
       }
-      #accept_button {
+      #accept_button, #decline_button {
         width: 10%;
       }
       #policy_link{
@@ -56,15 +56,20 @@ Example:
       on-response="_checkCountryCode"></byutv-jsonp>
 
     <paper-dialog id="consent_dialog"
-                  no-cancel-on-esc-key="true"
-                  no-cancel-on-outside-click="true"
-                  entry-animation="scale-up-animation"
-                  exit-animation="fade-out-animation">
+      no-cancel-on-esc-key="true"
+      no-cancel-on-outside-click="true"
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation">
       <div>
-        <p id="dialog_body"></p>
-        <a id="policy_link"></a>
+        <p id="dialog_body">{{dialogText}}</p>
+        <template is="dom-if" if='{{moreInfoText}}'>
+          <a id="policy_link" href="{{moreInfoLink}}">{{moreInfoText}}</a>
+        </template>
       </div>
-      <paper-button raised id="accept_button" on-click="_setCookie" dialog-confirm></paper-button>
+      <paper-button raised id="accept_button" on-click="_setCookie" dialog-confirm>{{buttonText}}</paper-button>
+      <template is="dom-if" if='{{canDecline}}'>
+        <paper-button raised id="decline_button" on-click="_declineCookies" dialog-dismiss>{{declineButtonText}}</paper-button>
+      </template>
     </paper-dialog>
   </template>
 
@@ -101,6 +106,14 @@ Example:
       cookiePath: {
         type: String,
         value: '/'
+      },
+      canDecline: {
+        type: Boolean,
+        value: false
+      },
+      declineButtonText: {
+        type: String,
+        value: "Decline"
       }
     },
 
@@ -154,12 +167,6 @@ Example:
     },
 
     _showDialog: function() {
-      this.$.dialog_body.textContent = this.dialogText;
-      if (this.moreInfoText) {
-          this.$.policy_link.textContent = this.moreInfoText;
-          this.$.policy_link.href = this.moreInfoLink;
-      }
-      this.$.accept_button.textContent = this.buttonText;
       this.$.consent_dialog.open();
     },
 
