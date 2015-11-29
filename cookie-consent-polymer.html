@@ -26,10 +26,8 @@ Example:
 
   <template>
     <style>
-      :host {
-      }
       paper-dialog > *:first-child {
-          margin-bottom: 24px;
+        margin-bottom: 24px;
       }
       #consent_dialog {
         width: 100%;
@@ -125,6 +123,10 @@ Example:
       fallbackUrl: {
         type: String,
         value: ""
+      },
+      reloadAfterAction: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -172,6 +174,9 @@ Example:
       date.toGMTString() + "; path=" + this.cookiePath;
       if (this.canDecline && this.fallbackUrl !== "") {
         window.location.href = this.fallbackUrl;
+      }
+      if (this.reloadAfterAction){
+        window.location.reload(false);
       }
     },
 

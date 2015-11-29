@@ -39,12 +39,12 @@ var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)acceptCookies\s*\=\s*(
 if (cookieValue == "true") {
   //load external service
 }
+This will block the services until the cookie has been set to true, use the `reload-after-action` property to do a reload after the user has consented.
 ```
 
 ## Todo
 
 * custom theme support for style and position(you have to open it and hack the style for now)
-* block cookies until consent option
 * more geoip services?
 
 ## Contributing
