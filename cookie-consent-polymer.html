@@ -1,5 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-jsonp-library/iron-jsonp-library.html">
+<link rel="import" href="../byutv-jsonp/byutv-jsonp.html" />
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../neon-animation/animations/scale-up-animation.html">
@@ -50,11 +50,10 @@ Example:
         padding-left: 5px;
       }
     </style>
-    <iron-jsonp-library id="check_country"
-      library-url="http://freegeoip.net/json/?callback=_getCountry"
-      notify-event="api-load"
-      callback-name="_getCountry"
-      library-loaded="{{loaded}}"></iron-jsonp-library>
+    <byutv-jsonp id="check_country"
+      url="http://freegeoip.net/json/"
+      on-response="_checkCountryCode"></byutv-jsonp>
+
     <paper-dialog id="consent_dialog"
                   no-cancel-on-esc-key="true"
                   no-cancel-on-outside-click="true"
@@ -76,9 +75,6 @@ Example:
 
     is: 'cookie-consent-polymer',
 
-    listeners: {
-      'api-load': '_getCountry',
-    },
     properties: {
 
       dialogText: {
@@ -101,11 +97,6 @@ Example:
         type: Number,
         value: 365
       }
-    },
-    _setCookie: function() {
-      var date = new Date();
-      date.setTime(+ date + (this.expiresInDays * 86400000));
-      document.cookie = "acceptCookies=true; expires=" + date.toGMTString() + "; path=/";
     },
 
     _countryCodes: function() {
@@ -140,22 +131,37 @@ Example:
         ];
     },
 
-    _getCountry: function(e) {
-      var code = e.detail[0].country_code;
-      if (document.cookie.indexOf("acceptCookies") < 0 && this._countryCodes().indexOf(code) >= 0) {
-          this.$.consent_dialog.open();
-      } else {
-        console.log("Nope");
+    _setCookie: function() {
+      var date = new Date();
+      date.setTime(+ date + (this.expiresInDays * 86400000));
+      document.cookie = "acceptCookies=true; expires=" + date.toGMTString() + "; path=/";
+    },
+
+    _cookieExists: function() {
+      return (document.cookie.indexOf("acceptCookies") >=0)
+    },
+
+    _checkCountryCode: function(e) {
+      var code = e.detail.country_code;
+      if (this._countryCodes().indexOf(code)){
+        this._showDialog();
       }
     },
 
-    attached: function() {
+    _showDialog: function() {
       this.$.dialog_body.textContent = this.dialogText;
       if (this.moreInfoText) {
           this.$.policy_link.textContent = this.moreInfoText;
           this.$.policy_link.href = this.moreInfoLink;
       }
       this.$.accept_button.textContent = this.buttonText;
+      this.$.consent_dialog.open();
+    },
+
+    attached: function() {
+      if (!this._cookieExists()) {
+        this.$.check_country.generateRequest();
+      }
     }
 
   });
