@@ -168,6 +168,7 @@ Example:
       } else {
         var choice = e.target.dataset.choice;
       }
+      console.log(choice);
       var date = new Date();
       date.setTime(+ date + (this.expiresInDays * 86400000));
       document.cookie = "acceptCookies=" + choice + "; expires=" +
@@ -175,7 +176,7 @@ Example:
       if (this.canDecline && this.fallbackUrl !== "") {
         window.location.href = this.fallbackUrl;
       }
-      if (this.reloadAfterAction){
+      if (this.reloadAfterAction && (choice === true || choice == "true")){
         window.location.reload(false);
       }
     },
