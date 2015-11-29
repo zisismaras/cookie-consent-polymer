@@ -16,7 +16,6 @@ Example:
         more-info-link="/policy"
         more-info-text="Learn more" #leave empty to disable it
         button-text="Accept"
-        cookie-path="/"
         expires-in-days=30></cookie-consent-polymer>
 
 @element cookie-consent-polymer
@@ -66,9 +65,9 @@ Example:
           <a id="policy_link" href="{{moreInfoLink}}">{{moreInfoText}}</a>
         </template>
       </div>
-      <paper-button raised id="accept_button" on-click="_setCookie" dialog-confirm>{{buttonText}}</paper-button>
+      <paper-button raised id="accept_button" on-click="_setCookie" data-choice="true" dialog-confirm>{{buttonText}}</paper-button>
       <template is="dom-if" if='{{canDecline}}'>
-        <paper-button raised id="decline_button" on-click="_declineCookies" dialog-dismiss>{{declineButtonText}}</paper-button>
+        <paper-button raised id="decline_button" on-click="_setCookie" data-choice="false" dialog-dismiss>{{declineButtonText}}</paper-button>
       </template>
     </paper-dialog>
   </template>
@@ -149,10 +148,11 @@ Example:
         ];
     },
 
-    _setCookie: function() {
+    _setCookie: function(e) {
       var date = new Date();
       date.setTime(+ date + (this.expiresInDays * 86400000));
-      document.cookie = "acceptCookies=true; expires=" + date.toGMTString() + "; path=" + this.cookiePath;
+      document.cookie = "acceptCookies=" + e.target.dataset.choice + "; expires=" +
+      date.toGMTString() + "; path=" + this.cookiePath;
     },
 
     _cookieExists: function() {
