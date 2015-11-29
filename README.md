@@ -25,6 +25,15 @@ bower install cookie-consent-polymer --save
 
 Check the documentation and demo page for all available options [here](http://zisismaras.me/cookie-consent-polymer/components/cookie-consent-polymer/)
 
+## Blocking 3rd party services
+If you have the decline option set, the element will set a cookie `acceptCookies=false`, you can then query this before loading your services.
+```javascript
+var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)acceptCookies\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+if (cookieValue == "true") {
+  //load external service
+}
+```
+
 ## Todo
 
 * custom theme support for style and position(you have to open it and hack the style for now)
