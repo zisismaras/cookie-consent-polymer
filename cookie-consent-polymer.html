@@ -113,6 +113,14 @@ Example:
       declineButtonText: {
         type: String,
         value: "Decline"
+      },
+      navigationConsent: {
+        type: Boolean,
+        value: false
+      },
+      scrollConsent: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -149,9 +157,14 @@ Example:
     },
 
     _setCookie: function(e) {
+      if (e === true) {
+        var choice = true;
+      } else {
+        var choice = e.target.dataset.choice;
+      }
       var date = new Date();
       date.setTime(+ date + (this.expiresInDays * 86400000));
-      document.cookie = "acceptCookies=" + e.target.dataset.choice + "; expires=" +
+      document.cookie = "acceptCookies=" + choice + "; expires=" +
       date.toGMTString() + "; path=" + this.cookiePath;
     },
 
@@ -162,12 +175,26 @@ Example:
     _checkCountryCode: function(e) {
       var code = e.detail.country_code;
       if (this._countryCodes().indexOf(code)){
-        this._showDialog();
+        this._setup();
       }
     },
 
-    _showDialog: function() {
+    _setup: function() {
       this.$.consent_dialog.open();
+      if (this.navigationConsent) {
+        var that = this;
+        window.onhashchange = function() {
+          that._setCookie(true);
+          that.$.consent_dialog.close();
+        }
+      }
+      if (this.scrollConsent) {
+        var that = this;
+        window.onscroll = function() {
+          that._setCookie(true);
+          that.$.consent_dialog.close();
+        }
+      }
     },
 
     attached: function() {
