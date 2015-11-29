@@ -121,6 +121,10 @@ Example:
       scrollConsent: {
         type: Boolean,
         value: false
+      },
+      fallbackUrl: {
+        type: String,
+        value: ""
       }
     },
 
@@ -166,6 +170,9 @@ Example:
       date.setTime(+ date + (this.expiresInDays * 86400000));
       document.cookie = "acceptCookies=" + choice + "; expires=" +
       date.toGMTString() + "; path=" + this.cookiePath;
+      if (this.canDecline && this.fallbackUrl !== "") {
+        window.location.href = this.fallbackUrl;
+      }
     },
 
     _cookieExists: function() {

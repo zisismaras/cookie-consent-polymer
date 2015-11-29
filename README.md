@@ -23,6 +23,13 @@ bower install cookie-consent-polymer --save
     expires-in-days=30></cookie-consent-polymer>
 ```
 
+## Features
+
+* Only show to EU visitors where the law is active
+* Decline button option with an optional fallback url for redirection
+* Implicit scrolling or navigating consent option
+* Add custom text to dialog and buttons
+
 Check the documentation and demo page for all available options [here](http://zisismaras.me/cookie-consent-polymer/components/cookie-consent-polymer/)
 
 ## Blocking 3rd party services
@@ -37,8 +44,6 @@ if (cookieValue == "true") {
 ## Todo
 
 * custom theme support for style and position(you have to open it and hack the style for now)
-* decline and/or 'take me back' option
-* scroll or navigating consent option
 * block cookies until consent option
 * more geoip services?
 
