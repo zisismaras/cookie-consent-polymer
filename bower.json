@@ -6,7 +6,7 @@
   ],
   "description": "The cookie-consent-polymer element provides a dialog with the option to accept website cookies accordingto the EU law. Uses http://freegeoip.net for geolocation.",
   "keywords": [
-    "web-component",
+    "web-components",
     "polymer",
     "cookie",
     "eu",

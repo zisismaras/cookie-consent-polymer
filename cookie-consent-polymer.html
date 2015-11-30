@@ -168,7 +168,6 @@ Example:
       } else {
         var choice = e.target.dataset.choice;
       }
-      console.log(choice);
       var date = new Date();
       date.setTime(+ date + (this.expiresInDays * 86400000));
       document.cookie = "acceptCookies=" + choice + "; expires=" +

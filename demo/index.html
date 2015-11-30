@@ -1,15 +1,27 @@
 <!doctype html>
 <html>
   <head>
+    <script>
+      //delete the cookie when the demo page is loaded
+      function removeItem(sKey, sPath, sDomain) {
+          document.cookie = encodeURIComponent(sKey) +
+                        "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" +
+                        (sDomain ? "; domain=" + sDomain : "") +
+                        (sPath ? "; path=" + sPath : "");
+      }
+
+      removeItem("acceptCookies", "/");
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>cookie-consent-polymer Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../cookie-consent-polymer.html">
+    <link rel="import" href="../../paper-button/paper-button.html">
   </head>
 
   <body unresolved>
-
+    <paper-button raised onclick="window.location.reload(false)">Refresh</paper-button>
     <cookie-consent-polymer></cookie-consent-polymer>
 
   </body>
