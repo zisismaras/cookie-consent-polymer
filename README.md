@@ -29,23 +29,77 @@ bower install cookie-consent-polymer --save
 * Decline button option with an optional fallback url for redirection
 * Implicit scrolling or navigating consent option
 * Add custom text to dialog and buttons
+* Support for custom themes using polymer shared styles
+* ...More micro configurations like expiring time, auto reload, cookie path etc
 
 Check the documentation and demo page for all available options [here](http://zisismaras.me/cookie-consent-polymer/components/cookie-consent-polymer/)
 
-## Blocking 3rd party services
-If you have the decline option set, the element will set a cookie `acceptCookies=false`, you can then query this before loading your services.
+## Custom Themes
+
+You can customize the element as described in the [polymer documentation](https://www.polymer-project.org/1.0/docs/devguide/styling.html#style-modules).  
+##### Example
+First create a custom style element
+```html
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="my-theme">
+  <template>
+    <style>
+      cookie-consent-polymer /deep/ #consent_dialog {
+        width: auto;
+        height: auto;
+        bottom: 18%;
+        left: 80%;
+        display: block;
+      }
+      cookie-consent-polymer /deep/ .dialog_item {
+        display: inline-block;
+      }
+      cookie-consent-polymer /deep/ #accept_button {
+        margin-left: 34%;
+        margin-bottom: 5%;
+        background-color: #FFEE58;
+      }
+      cookie-consent-polymer /deep/ #policy_link {
+        margin-left: 31%;
+      }
+    </style>
+  </template>
+</dom-module>
+```
+To use it inside an element
+```html
+<link rel="import" href="../my-theme/my-theme.html">
+<dom-module id="my-other-element">
+  <template>
+    <style include="my-theme"></style>
+    Hi
+  </template>
+  <script>Polymer({is: 'my-other-element'});</script>
+</dom-module>
+```
+To use it in the main document
+```html
+<link rel="import" href="../my-theme/my-theme.html">
+
+<style is="custom-style" include="my-theme"></style>
+```
+##### Selectors
+* #consent_dialog => the whole paper-dialog
+* #dialog_body, #policy_link, #accept_button, #decline_button => id selectors for individual items
+* .dialog_item => class selector for all the items in the dialog
+
+
+## Blocking 3rd party services until cookie is set
+If you have the decline option set, the element will set a cookie `acceptCookies=false` when the decline button is clicked, you can then query this before loading your services.
 ```javascript
 var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)acceptCookies\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 if (cookieValue == "true") {
   //load external service
 }
-This will block the services until the cookie has been set to true, use the `reload-after-action` property to do a reload after the user has consented.
 ```
+This will block the services until the cookie has been set to `"true"`, use the `reload-after-action` property to do a reload after the user has consented.
 
-## Todo
-
-* custom theme support for style and position(you have to open it and hack the style for now)
-* more geoip services?
 
 ## Contributing
 1. Fork it
