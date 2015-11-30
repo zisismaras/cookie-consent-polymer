@@ -39,7 +39,6 @@ Example:
       #dialog_body, #policy_link, #accept_button, #decline_button {
         display: table-cell;
         vertical-align: middle;
-
       }
       #accept_button, #decline_button {
         width: 10%;
@@ -58,14 +57,14 @@ Example:
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation">
       <div>
-        <p id="dialog_body">{{dialogText}}</p>
+        <p id="dialog_body" class="dialog_item">{{dialogText}}</p>
         <template is="dom-if" if='{{moreInfoText}}'>
-          <a id="policy_link" href="{{moreInfoLink}}">{{moreInfoText}}</a>
+          <a id="policy_link" class="dialog_item" href="{{moreInfoLink}}">{{moreInfoText}}</a>
         </template>
       </div>
-      <paper-button raised id="accept_button" on-click="_setCookie" data-choice="true" dialog-confirm>{{buttonText}}</paper-button>
+      <paper-button raised id="accept_button" class="dialog_item" on-click="_setCookie" data-choice="true" dialog-confirm>{{buttonText}}</paper-button>
       <template is="dom-if" if='{{canDecline}}'>
-        <paper-button raised id="decline_button" on-click="_setCookie" data-choice="false" dialog-dismiss>{{declineButtonText}}</paper-button>
+        <paper-button raised id="decline_button" class="dialog_item" on-click="_setCookie" data-choice="false" dialog-dismiss>{{declineButtonText}}</paper-button>
       </template>
     </paper-dialog>
   </template>
