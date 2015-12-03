@@ -55,6 +55,6 @@ git config user.email "<your@email.com>"
 # send it all to github
 git add -A .
 git commit -am 'Deploy to GitHub Pages'
-git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
+git push --force --quiet -u "https://${GH_TOKEN}@${GH_REF}" gh-pages
 
 popd >/dev/null
