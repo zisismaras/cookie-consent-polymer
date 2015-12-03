@@ -2,7 +2,7 @@
 language: node_js
 node_js: stable
 script:
-  - bash ./gpages_build.sh zisismaras cookie-consent-polymer
+  - bash ./gpages_build.sh zisismaras cookie-consent-polymer Travis contact@zisismaras.me
 before_script:
 - npm install bower
 - export PATH=$PWD/node_modules/.bin:$PATH

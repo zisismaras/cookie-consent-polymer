@@ -18,7 +18,9 @@
 # Run in a clean directory passing in a GitHub org and repo name
 org=$1
 repo=$2
-branch=${3:-"master"} # default to master when branch isn't specified
+name=$3
+email=$4
+branch=${5:-"master"} # default to master when branch isn't specified
 
 mkdir temp && cd temp
 
@@ -49,8 +51,8 @@ mv demo components/$repo/
 # redirect by default to the component folder
 echo "<META http-equiv="refresh" content=\"0;URL=components/$repo/\">" >index.html
 
-git config user.name "Travis CI"
-git config user.email "<your@email.com>"
+git config user.name $name
+git config user.email $email
 
 # send it all to github
 git add -A .
