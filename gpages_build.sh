@@ -1,4 +1,3 @@
-#!/bin/bash -e
 #
 # Modified to work with Travis CI automated builds
 # Original license follows
