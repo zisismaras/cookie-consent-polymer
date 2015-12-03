@@ -24,7 +24,7 @@ mkdir temp && cd temp
 
 # make folder (same as input, no checking!)
 mkdir $repo
-git clone git@github.com:$org/$repo.git --single-branch
+git clone "https://${GH_TOKEN}@${GH_REF}" --single-branch
 
 # switch to gh-pages branch
 pushd $repo >/dev/null
@@ -48,6 +48,9 @@ mv demo components/$repo/
 
 # redirect by default to the component folder
 echo "<META http-equiv="refresh" content=\"0;URL=components/$repo/\">" >index.html
+
+git config user.name "Travis CI"
+git config user.email "<your@email.com>"
 
 # send it all to github
 git add -A .
