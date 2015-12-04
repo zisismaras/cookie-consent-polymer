@@ -26,7 +26,7 @@
 
         setup(function(done) {
           //create the cookie to stop the automatic request
-          document.cookie = "acceptCookies=false; expires=Thu, 01 Jan 2100 00:00:00 GMT; path=/";
+          document.cookie = "acceptCookies=true; expires=Thu, 01 Jan 2100 00:00:00 GMT; path=/";
           myEl = fixture('cookie-consent-polymer-fixture');
           flush(function(){
               done();
@@ -46,12 +46,12 @@
         });
         test('clicking decline, sets the cookie to false', function(done) {
           myEl._setup();
-          myEl.querySelector("#decline_button").addEventListener('on-click', function(e) {
+          myEl.querySelector("#decline_button").addEventListener('click', function(e) {
             assert.equal(e.target.dataset.choice, 'false');
             assert.equal(getCookie("acceptCookies"), 'false');
             done();
           });
-          myEl.querySelector("#decline_button").fire('on-click');
+          myEl.querySelector("#decline_button").fire('click');
         });
 
       });

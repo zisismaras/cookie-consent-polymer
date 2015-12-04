@@ -26,12 +26,12 @@
 
         setup(function() {
           //create the cookie to stop the automatic request
-          document.cookie = "acceptCookies=true; expires=Thu, 01 Jan 2100 00:00:00 GMT; path=/";
+          document.cookie = "acceptCookies=false; expires=Thu, 01 Jan 2100 00:00:00 GMT; path=/";
           myEl = fixture('cookie-consent-polymer-fixture');
         });
         teardown(function(done) {
           //delete the cookie
-          document.cookie = "acceptCookies=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+          document.cookie = "acceptCookies=false; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
           flush(done);
         });
 
@@ -41,12 +41,12 @@
         });
         test('clicking accept, sets the cookie to true', function(done) {
           myEl._setup();
-          myEl.$.accept_button.addEventListener('on-click', function(e) {
+          myEl.$.accept_button.addEventListener('click', function(e) {
             assert.equal(e.target.dataset.choice, 'true');
             assert.equal(getCookie("acceptCookies"), 'true');
             done();
           });
-          myEl.$.accept_button.fire('on-click');
+          myEl.$.accept_button.fire('click');
         });
 
       });
