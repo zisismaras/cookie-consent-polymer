@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <script src="utils.js"></script>
+
+    <link rel="import" href="../cookie-consent-polymer.html">
+  </head>
+  <body>
+
+    <test-fixture id="cookie-consent-polymer-fixture">
+      <template>
+        <cookie-consent-polymer></cookie-consent-polymer>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('<cookie-consent-polymer>', function() {
+
+        var myEl;
+
+        setup(function() {
+          //create the cookie to stop the automatic request
+          document.cookie = "acceptCookies=true; expires=Thu, 01 Jan 2100 00:00:00 GMT; path=/";
+          myEl = fixture('cookie-consent-polymer-fixture');
+        });
+        teardown(function(done) {
+          //delete the cookie
+          document.cookie = "acceptCookies=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+          flush(done);
+        });
+
+        test('dialog opens correctly', function() {
+          myEl._setup();
+          assert.equal(myEl.$.consent_dialog.opened, true);
+        });
+        test('clicking accept, sets the cookie to true', function(done) {
+          myEl._setup();
+          myEl.$.accept_button.addEventListener('on-click', function(e) {
+            assert.equal(e.target.dataset.choice, 'true');
+            assert.equal(getCookie("acceptCookies"), 'true');
+            done();
+          });
+          myEl.$.accept_button.fire('on-click');
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

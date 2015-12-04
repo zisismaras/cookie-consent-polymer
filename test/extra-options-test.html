@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <script src="utils.js"></script>
+
+    <link rel="import" href="../cookie-consent-polymer.html">
+  </head>
+  <body>
+
+    <test-fixture id="cookie-consent-polymer-fixture">
+      <template>
+        <cookie-consent-polymer
+            scroll-consent
+            navigation-consent
+            can-decline
+            decline-button-text="nope"
+            dialog-text="this is text"
+            more-info-link="#policy"
+            more-info-text="Learn more"
+            button-text="Okay"
+            expires-in-days=30></cookie-consent-polymer>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('<cookie-consent-polymer>', function() {
+
+        var myEl;
+
+        setup(function(done) {
+          //create the cookie to stop the automatic request
+          document.cookie = "acceptCookies=false; expires=Thu, 01 Jan 2100 00:00:00 GMT; path=/";
+          myEl = fixture('cookie-consent-polymer-fixture');
+          flush(function(){
+              done();
+          });
+        });
+        teardown(function(done) {
+          //delete the cookie
+          document.cookie = "acceptCookies=false; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+          flush(done);
+        });
+
+        test('dialog\'s children are set correctly', function(done) {
+          myEl._setup();
+          assert.equal(myEl.$.dialog_body.textContent, "this is text");
+          assert.equal(myEl.querySelector("#policy_link").textContent, "Learn more");
+          assert.equal(myEl.querySelector("#policy_link").href, (window.location.href + "#policy"));
+          assert.equal(myEl.$.accept_button.textContent, "Okay");
+          assert.equal(myEl.querySelector("#decline_button").textContent, "nope");
+          done();
+        });
+        test('scrolling consent works', function(done) {
+          myEl._setup();
+          window.addEventListener('scroll', function(e) {
+            assert.equal(getCookie("acceptCookies"), 'true');
+            assert.equal(myEl.$.consent_dialog.opened, false);
+            done();
+          });
+          window.scrollTo(0, 1000);
+        });
+        test('navigation consent works', function(done) {
+          myEl._setup();
+          window.addEventListener('hashchange', function(e) {
+            assert.equal(getCookie("acceptCookies"), 'true');
+            assert.equal(myEl.$.consent_dialog.opened, false);
+            done();
+          });
+          window.location += "#a_link";
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

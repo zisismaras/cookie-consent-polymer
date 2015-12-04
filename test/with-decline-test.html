@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <script src="utils.js"></script>
+
+    <link rel="import" href="../cookie-consent-polymer.html">
+  </head>
+  <body>
+
+    <test-fixture id="cookie-consent-polymer-fixture">
+      <template>
+        <cookie-consent-polymer can-decline></cookie-consent-polymer>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('<cookie-consent-polymer>', function() {
+
+        var myEl;
+
+        setup(function(done) {
+          //create the cookie to stop the automatic request
+          document.cookie = "acceptCookies=false; expires=Thu, 01 Jan 2100 00:00:00 GMT; path=/";
+          myEl = fixture('cookie-consent-polymer-fixture');
+          flush(function(){
+              done();
+          });
+        });
+        teardown(function(done) {
+          //delete the cookie
+          document.cookie = "acceptCookies=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+          flush(done);
+        });
+
+        test('the decline button is visible', function(done) {
+          myEl._setup();
+          assert.isDefined(myEl.querySelector("#decline_button"));
+          assert.isNotNull(myEl.querySelector("#decline_button"));
+          done();
+        });
+        test('clicking decline, sets the cookie to false', function(done) {
+          myEl._setup();
+          myEl.querySelector("#decline_button").addEventListener('on-click', function(e) {
+            assert.equal(e.target.dataset.choice, 'false');
+            assert.equal(getCookie("acceptCookies"), 'false');
+            done();
+          });
+          myEl.querySelector("#decline_button").fire('on-click');
+        });
+
+      });
+    </script>
+
+  </body>
+</html>
