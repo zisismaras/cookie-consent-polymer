@@ -1,5 +1,6 @@
 # cookie-consent-polymer
-[![Bower version](https://badge.fury.io/bo/cookie-consent-polymer.svg)](http://badge.fury.io/bo/cookie-consent-polymer)  
+[![Bower version](https://badge.fury.io/bo/cookie-consent-polymer.svg)](http://badge.fury.io/bo/cookie-consent-polymer)
+[![Build Status](https://travis-ci.org/zisismaras/cookie-consent-polymer.svg?branch=master)](https://travis-ci.org/zisismaras/cookie-consent-polymer)  
 
 The cookie-consent-polymer element provides a dialog with the option to accept website cookies according
 to the EU law.  
