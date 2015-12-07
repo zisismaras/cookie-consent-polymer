@@ -37,7 +37,7 @@ Check the documentation and demo page for all available options [here](http://zi
 
 ## Custom Themes
 
-You can customize the element as described in the [polymer documentation](https://www.polymer-project.org/1.0/docs/devguide/styling.html#style-modules).  
+You can style the element as described in the [polymer documentation](https://www.polymer-project.org/1.0/docs/devguide/styling.html#style-modules).  
 ##### Example
 First create a custom style element
 ```html
@@ -46,23 +46,20 @@ First create a custom style element
 <dom-module id="my-theme">
   <template>
     <style>
-      cookie-consent-polymer /deep/ #consent_dialog {
-        width: auto;
-        height: auto;
-        bottom: 18%;
-        left: 80%;
-        display: block;
-      }
-      cookie-consent-polymer /deep/ .dialog_item {
-        display: inline-block;
-      }
-      cookie-consent-polymer /deep/ #accept_button {
-        margin-left: 34%;
-        margin-bottom: 5%;
-        background-color: #FFEE58;
-      }
-      cookie-consent-polymer /deep/ #policy_link {
-        margin-left: 31%;
+      cookie-consent-polymer {
+        --dialog-theme: {
+          top: 60px;
+          background-color: #E1F5FE;
+          color: #212121;
+        };
+        --accept-button-theme: {
+          background-color: #29B6F6;
+          color: #212121;
+        };
+        --decline-button-theme: {
+          background-color: #29B6F6;
+          color: #212121;
+        };
       }
     </style>
   </template>
@@ -85,10 +82,13 @@ To use it in the main document
 
 <style is="custom-style" include="my-theme"></style>
 ```
-##### Selectors
-* #consent_dialog => the whole paper-dialog
-* #dialog_body, #policy_link, #accept_button, #decline_button => id selectors for individual items
-* .dialog_item => class selector for all the items in the dialog
+##### Custom CSS properties
+* `--cookie-consent-theme` => the element itself
+* `--dialog-theme` => the whole paper-dialog
+* `--dialog-body-theme`, `--policy-link-theme`, `--accept-button-theme`, `--decline-button-theme` => individual items
+* `--dialog-items-theme` => all the items in the dialog
+
+Check the demo directory for two examples.
 
 
 ## Blocking 3rd party services until cookie is set
