@@ -26,8 +26,8 @@ Example:
 
   <template>
     <style>
-      paper-dialog > *:first-child {
-        margin-bottom: 24px;
+      :host {
+        @apply(--cookie-consent-theme);
       }
       #consent_dialog {
         width: 100%;
@@ -35,16 +35,32 @@ Example:
         position: absolute;
         bottom: 0;
         display: table;
+        @apply(--dialog-theme);
       }
       #dialog_body, #policy_link, #accept_button, #decline_button {
         display: table-cell;
         vertical-align: middle;
+        @apply(--dialog-items-theme);
       }
-      #accept_button, #decline_button {
+      #dialog_body {
+        padding-bottom: 24px;
+        @apply(--dialog-body-theme);
+      }
+      #accept_button {
         width: 10%;
+        @apply(--accept-button-theme);
+      }
+      #decline_button{
+        width: 10%;
+        @apply(--decline-button-theme);
       }
       #policy_link{
         padding-left: 5px;
+        padding-bottom: 24px;
+        @apply(--policy-link-theme);
+      }
+      .dialog_item {
+        @apply(--dialog-items-theme);
       }
     </style>
     <byutv-jsonp id="check_country"
@@ -62,9 +78,9 @@ Example:
           <a id="policy_link" class="dialog_item" href="{{moreInfoLink}}">{{moreInfoText}}</a>
         </template>
       </div>
-      <paper-button raised id="accept_button" class="dialog_item" on-click="_setCookie" data-choice="true" dialog-confirm>{{buttonText}}</paper-button>
+      <paper-button id="accept_button" class="dialog_item" on-click="_setCookie" data-choice="true" dialog-confirm>{{buttonText}}</paper-button>
       <template is="dom-if" if='{{canDecline}}'>
-        <paper-button raised id="decline_button" class="dialog_item" on-click="_setCookie" data-choice="false" dialog-dismiss>{{declineButtonText}}</paper-button>
+        <paper-button id="decline_button" class="dialog_item" on-click="_setCookie" data-choice="false" dialog-dismiss>{{declineButtonText}}</paper-button>
       </template>
     </paper-dialog>
   </template>
