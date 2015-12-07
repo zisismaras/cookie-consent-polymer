@@ -1,6 +1,6 @@
 {
   "name": "cookie-consent-polymer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
     "Zisis Maras <contact@zisismaras.me>"
   ],
@@ -18,7 +18,8 @@
   "homepage": "https://github.com/zisismaras/cookie-consent-polymer",
   "ignore": [
     "/.*",
-    "/test/"
+    "/test/",
+    "gpages_build.sh"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.1.0",
