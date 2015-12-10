@@ -190,7 +190,7 @@ Example:
       if (this.canDecline && this.fallbackUrl !== "") {
         window.location.href = this.fallbackUrl;
       }
-      if (this.reloadAfterAction && (choice === true || choice == "true")){
+      if (this.reloadAfterAction && (choice === true || choice === "true")){
         window.location.reload(false);
       }
     },
@@ -201,8 +201,10 @@ Example:
 
     _checkCountryCode: function(e) {
       var code = e.detail.country_code;
-      if (this._countryCodes().indexOf(code)){
+      if (this._countryCodes().indexOf(code) >= 0){
         this._setup();
+      } else {
+        this._setCookie(true);
       }
     },
 
