@@ -211,18 +211,16 @@ Example:
     _setup: function() {
       this.$.consent_dialog.open();
       if (this.navigationConsent) {
-        var that = this;
         window.onhashchange = function() {
-          that._setCookie(true);
-          that.$.consent_dialog.close();
-        }
+          this._setCookie(true);
+          this.$.consent_dialog.close();
+        }.bind(this)
       }
       if (this.scrollConsent) {
-        var that = this;
         window.onscroll = function() {
-          that._setCookie(true);
-          that.$.consent_dialog.close();
-        }
+          this._setCookie(true);
+          this.$.consent_dialog.close();
+        }.bind(this)
       }
     },
 
