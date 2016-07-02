@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <script>
+      //delete the cookie when the demo page is loaded
+      function removeItem(sKey, sPath, sDomain) {
+          document.cookie = encodeURIComponent(sKey) +
+                        "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" +
+                        (sDomain ? "; domain=" + sDomain : "") +
+                        (sPath ? "; path=" + sPath : "");
+      }
+
+      removeItem("acceptCookies", "/");
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>cookie-consent-polymer Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../cookie-consent-polymer.html">
+    <link rel="import" href="../../paper-button/paper-button.html">
+
+    <link rel="import" href="test-theme/test-theme.html">
+    <link rel="import" href="test-theme-2/test-theme-2.html">
+  </head>
+
+  <body unresolved>
+
+    <style is="custom-style" include="test-theme"></style>
+    <style is="custom-style" include="test-theme-2"></style>
+    <div>
+    <paper-button raised onclick="window.location.reload(false)">Refresh</paper-button>
+    <span>to delete the cookies</span>
+    </div>
+    <cookie-consent-polymer id="dialog1" skip-location-check></cookie-consent-polymer>
+    <cookie-consent-polymer id="dialog2" skip-location-check can-decline dialog-text="Do you want us to track you? If you don't accept the website will probably crash"
+      button-text="please track me"></cookie-consent-polymer>
+    <cookie-consent-polymer more-info-text="Our Policy" skip-location-check></cookie-consent-polymer>
+  </body>
+</html>

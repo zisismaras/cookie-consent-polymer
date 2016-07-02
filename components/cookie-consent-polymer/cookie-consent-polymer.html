@@ -1,0 +1,243 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../byutv-jsonp/byutv-jsonp.html" />
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<!--
+The cookie-consent-polymer element provides a dialog with the option to accept website cookies according
+to the EU law.
+Uses http://freegeoip.net for geolocation.
+
+Example:
+
+    <cookie-consent-polymer
+        dialog-text="This website uses cookies to ensure you get the best experience on our website."
+        more-info-link="/policy"
+        more-info-text="Learn more" #leave empty to disable it
+        button-text="Accept"
+        expires-in-days=30></cookie-consent-polymer>
+
+@element cookie-consent-polymer
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="cookie-consent-polymer">
+
+  <template>
+    <style>
+      :host {
+        @apply(--cookie-consent-theme);
+      }
+      #consent_dialog {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        bottom: 0;
+        display: table;
+        @apply(--dialog-theme);
+      }
+      #dialog_body, #policy_link, #accept_button, #decline_button {
+        display: table-cell;
+        vertical-align: middle;
+        @apply(--dialog-items-theme);
+      }
+      #dialog_body {
+        padding-bottom: 24px;
+        @apply(--dialog-body-theme);
+      }
+      #accept_button {
+        width: 10%;
+        @apply(--accept-button-theme);
+      }
+      #decline_button{
+        width: 10%;
+        @apply(--decline-button-theme);
+      }
+      #policy_link{
+        padding-left: 5px;
+        padding-bottom: 24px;
+        @apply(--policy-link-theme);
+      }
+      .dialog_item {
+        @apply(--dialog-items-theme);
+      }
+    </style>
+    <byutv-jsonp id="check_country"
+      url="https://freegeoip.net/json/"
+      on-response="_checkCountryCode"></byutv-jsonp>
+
+    <paper-dialog id="consent_dialog"
+      no-cancel-on-esc-key="true"
+      no-cancel-on-outside-click="true"
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation">
+      <div>
+        <p id="dialog_body" class="dialog_item">{{dialogText}}</p>
+        <template is="dom-if" if='{{moreInfoText}}'>
+          <a id="policy_link" class="dialog_item" href="{{moreInfoLink}}">{{moreInfoText}}</a>
+        </template>
+      </div>
+      <paper-button id="accept_button" class="dialog_item" on-click="_setCookie" data-choice="true" dialog-confirm>{{buttonText}}</paper-button>
+      <template is="dom-if" if='{{canDecline}}'>
+        <paper-button id="decline_button" class="dialog_item" on-click="_setCookie" data-choice="false" dialog-dismiss>{{declineButtonText}}</paper-button>
+      </template>
+    </paper-dialog>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'cookie-consent-polymer',
+
+    properties: {
+
+      dialogText: {
+        type: String,
+        value: "This website uses cookies to ensure you get the best experience on our website."
+      },
+      moreInfoLink: {
+        type: String,
+        value: "/policy"
+      },
+      moreInfoText: {
+        type: String,
+        value: "More info"
+      },
+      buttonText: {
+        type: String,
+        value: "Got it!"
+      },
+      expiresInDays: {
+        type: Number,
+        value: 365
+      },
+      cookiePath: {
+        type: String,
+        value: '/'
+      },
+      canDecline: {
+        type: Boolean,
+        value: false
+      },
+      declineButtonText: {
+        type: String,
+        value: "Decline"
+      },
+      navigationConsent: {
+        type: Boolean,
+        value: false
+      },
+      skipLocationCheck: {
+        type: Boolean,
+        value: false
+      },
+      scrollConsent: {
+        type: Boolean,
+        value: false
+      },
+      fallbackUrl: {
+        type: String,
+        value: ""
+      },
+      reloadAfterAction: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    _countryCodes: function() {
+        return [
+          'BE',
+          'BG',
+          'CZ',
+          'DK',
+          'DE',
+          'EE',
+          'IE',
+          'GR',
+          'ES',
+          'FR',
+          'IT',
+          'CY',
+          'LV',
+          'LT',
+          'LU',
+          'HU',
+          'MT',
+          'NL',
+          'AT',
+          'PL',
+          'PT',
+          'RO',
+          'SI',
+          'SK',
+          'FI',
+          'SE',
+          'GB'
+        ];
+    },
+
+    _setCookie: function(e) {
+      if (e === true) {
+        var choice = true;
+      } else {
+        var choice = e.target.dataset.choice;
+      }
+      var date = new Date();
+      date.setTime(+ date + (this.expiresInDays * 86400000));
+      document.cookie = "acceptCookies=" + choice + "; expires=" +
+      date.toGMTString() + "; path=" + this.cookiePath;
+      if (this.canDecline && this.fallbackUrl !== "") {
+        window.location.href = this.fallbackUrl;
+      }
+      if (this.reloadAfterAction && (choice === true || choice === "true")){
+        window.location.reload(false);
+      }
+    },
+
+    _cookieExists: function() {
+      return (document.cookie.indexOf("acceptCookies") >=0)
+    },
+
+    _checkCountryCode: function(e) {
+      var code = e.detail.country_code;
+      if (this._countryCodes().indexOf(code) >= 0){
+        this._setup();
+      } else {
+        this._setCookie(true);
+      }
+    },
+
+    _setup: function() {
+      this.$.consent_dialog.open();
+      if (this.navigationConsent) {
+        window.onhashchange = function() {
+          this._setCookie(true);
+          this.$.consent_dialog.close();
+        }.bind(this)
+      }
+      if (this.scrollConsent) {
+        window.onscroll = function() {
+          this._setCookie(true);
+          this.$.consent_dialog.close();
+        }.bind(this)
+      }
+    },
+
+    attached: function() {
+      if (!this._cookieExists()) {
+        if (this.skipLocationCheck) {
+          this._setup();
+        } else {
+          this.$.check_country.generateRequest();
+        }
+      }
+    }
+
+  });
+
+</script>
